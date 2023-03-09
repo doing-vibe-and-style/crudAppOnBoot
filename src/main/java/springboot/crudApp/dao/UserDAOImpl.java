@@ -28,8 +28,9 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void remove(Long id) {
-        User user = entityManager.find(User.class, id);
-        entityManager.remove(user);
+        entityManager.createNativeQuery("delete from User where ID = :id")
+                .setParameter("id", id)
+                .executeUpdate();
     }
 
     @Override
@@ -39,8 +40,7 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public List<User> listUsers() {
-        String jpql = "SELECT u FROM User u";
-        TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u", User.class);
         return query.getResultList();
     }
 }
